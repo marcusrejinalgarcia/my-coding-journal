@@ -2,39 +2,51 @@ import React from 'react';
 import {
   ChakraProvider,
   Box,
+  Heading,
+  Container,
   Text,
   Link,
   VStack,
   Code,
   Grid,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
   theme,
 } from '@chakra-ui/react';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { Logo } from './Logo';
+import Journal from './components/Journal';
 
 function App() {
   return (
     <ChakraProvider theme={theme}>
       <Box textAlign="center" fontSize="xl">
-        <Grid minH="100vh" p={3}>
-          <ColorModeSwitcher justifySelf="flex-end" />
-          <VStack spacing={8}>
-            <Logo h="40vmin" pointerEvents="none" />
-            <Text>
-              Edit <Code fontSize="xl">src/App.js</Code> and save to reload.
-            </Text>
-            <Link
-              color="teal.500"
-              href="https://chakra-ui.com"
-              fontSize="2xl"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn Chakra
-            </Link>
-          </VStack>
-        </Grid>
+        <Heading>Coding Journal</Heading>
+        <ColorModeSwitcher justifySelf="flex-end" />
       </Box>
+      <Container>
+        <Tabs variant='soft-rounded' align='center' >
+          <TabList>
+            <Tab>To Do</Tab>
+            <Tab>Daily Thoughts</Tab>
+          </TabList>
+
+          <TabPanels>
+            <TabPanel>
+              To Do
+              <Journal />
+            </TabPanel>
+            <TabPanel>
+              Daily Thoughts
+              <Journal />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </Container>
+
     </ChakraProvider>
   );
 }
