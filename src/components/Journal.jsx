@@ -70,16 +70,18 @@ const Journal = ({list}) => {
   }
 
   const ItemCard = ({ id, title, notes, date }) => {
-
+    const [isDone, setIsDone] = useState(false);
     function markDone(entryId) {
-      let newNotesList = notesList;
-      let index = newNotesList.findIndex(el => el.id === entryId);
-      newNotesList[index].isDone = !newNotesList[index].isDone;
-      console.log(newNotesList[index].isDone);
-      console.table(newNotesList);
-      setNotesList(newNotesList);
-      // For some reason, useEffect won't run here, but runs for deleteEntry. Next line is a workaround
-      localStorage.setItem("Journal", JSON.stringify(notesList, null, 2));
+      setIsDone(!isDone);
+      console.log(isDone);
+      // let newNotesList = notesList;
+      // let index = newNotesList.findIndex(entry => entry.id === entryId);
+      // newNotesList[index].isDone = !newNotesList[index].isDone;
+      // console.log(newNotesList[index].isDone);
+      // console.table(newNotesList);
+      // setNotesList(newNotesList);
+      // // For some reason, useEffect won't run here, but runs for deleteEntry. Next line is a workaround
+      // localStorage.setItem("Journal", JSON.stringify(notesList, null, 2));
     }
     function deleteEntry(entryId) {
       const newNotesList = notesList.filter((entry) => entry.id !== entryId);
@@ -106,17 +108,22 @@ const Journal = ({list}) => {
       >
         <Box mt={2}>
           <Link
-            fontSize="2xl"
+            fontSize='2xl'
             color={useColorModeValue("gray.700", "white")}
             fontWeight="700"
             _hover={{
               color: useColorModeValue("gray.600", "gray.200"),
               textDecor: "underline",
             }}
+            textDecoration={`${isDone ? 'line-through' : 'none'}`}
           >
             {title}
           </Link>
-          <chakra.p mt={2} color={useColorModeValue("gray.600", "gray.300")}>
+          <chakra.p 
+            mt={2} 
+            color={useColorModeValue("gray.600", "gray.300")}
+            textDecoration={`${isDone ? 'line-through' : 'none'}`}  
+          >
             {notes}
           </chakra.p>
         </Box>
