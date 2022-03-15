@@ -29,7 +29,7 @@ function App() {
         <ColorModeSwitcher justifySelf="flex-end" />
       </Flex>
       <Container maxW='container.xl'>
-        <Tabs variant='soft-rounded' align='center' >
+        <Tabs isLazy variant='soft-rounded' align='center' >
           <TabList>
             <Tab>To Do</Tab>
             <Tab>Daily Thoughts</Tab>

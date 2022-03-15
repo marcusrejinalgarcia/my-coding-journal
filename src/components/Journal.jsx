@@ -26,13 +26,14 @@ import {
   IconButton
 } from '@chakra-ui/react';
 import {
+  CheckIcon,
   DeleteIcon
 } from "@chakra-ui/icons"
 import { v4 as uuid } from 'uuid';
 
-const localStore = localStorage.getItem("Journal") ? JSON.parse(localStorage.getItem("Journal")) : [];
 
 const Journal = ({list}) => {
+  const localStore = localStorage.getItem("Journal") ? JSON.parse(localStorage.getItem("Journal")) : [];
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [id, setId] = useState(uuid());
@@ -48,7 +49,8 @@ const Journal = ({list}) => {
       date: date.toLocaleDateString(), 
       title: titleRef.current.value,
       notes: notesRef.current.value,
-      category: list
+      category: list,
+      isDone: false
     }
 
     setNotesList([...notesList, entry]);
@@ -62,16 +64,24 @@ const Journal = ({list}) => {
     localStorage.setItem("Journal", JSON.stringify(notesList, null, 2));
   }, [notesList])
 
-  
-
-  const deleteAll = () => {
+  const deleteCategory = () => {
     const newNotesList = notesList.filter(entry => entry.category !== list);
     setNotesList(newNotesList);
   }
 
   const ItemCard = ({ id, title, notes, date }) => {
+
+    function markDone(entryId) {
+      let newNotesList = notesList;
+      let index = newNotesList.findIndex(el => el.id === entryId);
+      newNotesList[index].isDone = !newNotesList[index].isDone;
+      console.log(newNotesList[index].isDone);
+      console.table(newNotesList);
+      setNotesList(newNotesList);
+      // For some reason, useEffect won't run here, but runs for deleteEntry. Next line is a workaround
+      localStorage.setItem("Journal", JSON.stringify(notesList, null, 2));
+    }
     function deleteEntry(entryId) {
-      console.log(entryId)
       const newNotesList = notesList.filter((entry) => entry.id !== entryId);
       setNotesList(newNotesList);
     }
@@ -86,13 +96,13 @@ const Journal = ({list}) => {
         minH='240'
         grow='1'
         shrink='0'
-        basis='360'
+        basis='200'
         rounded="lg"
         shadow="xl"
         bg={useColorModeValue("white", "gray.800")}
-        _hover={{
-          bg: useColorModeValue("gray.200", "gray.700")
-        }}
+        // _hover={{
+        //   bg: useColorModeValue("gray.200", "gray.700")
+        // }}
       >
         <Box mt={2}>
           <Link
@@ -117,14 +127,20 @@ const Journal = ({list}) => {
           >
             {date}
           </Text>
-  
-          <IconButton
-            id='delEntry'
-            variant='ghost'
-            aria-label='Delete Entry'
-            icon={<DeleteIcon />}
-            onClick={() => deleteEntry(id)}
-          />
+          <Flex>
+            <IconButton
+              variant='ghost'
+              aria-label='Mark as Done'
+              icon={<CheckIcon />}
+              onClick={() => markDone(id)}
+            />
+            <IconButton
+              variant='ghost'
+              aria-label='Delete Entry'
+              icon={<DeleteIcon />}
+              onClick={() => deleteEntry(id)}
+            />
+          </Flex>
         </Flex>
       </Flex>
     );
@@ -181,7 +197,7 @@ const Journal = ({list}) => {
           </ModalContent>
         </Modal>        
         
-        <Button variant='ghost' onClick={deleteAll}>
+        <Button variant='ghost' onClick={deleteCategory}>
           Delete All
         </Button>
       </ButtonGroup>
@@ -196,6 +212,7 @@ const Journal = ({list}) => {
                 title={entry.title} 
                 notes={entry.notes} 
                 date={entry.date} 
+                isDone={entry.isDone}
               />
           )}
         })}
