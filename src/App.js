@@ -1,7 +1,8 @@
 import React from 'react';
 import {
   ChakraProvider,
-  Box,
+  Flex,
+  Spacer,
   Heading,
   Container,
   Text,
@@ -17,17 +18,17 @@ import {
   theme,
 } from '@chakra-ui/react';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
-import { Logo } from './Logo';
 import Journal from './components/Journal';
 
 function App() {
   return (
     <ChakraProvider theme={theme}>
-      <Box textAlign="center" fontSize="xl">
+      <Flex textAlign="center" fontSize="xl" m={4}>
         <Heading>Coding Journal</Heading>
+        <Spacer />
         <ColorModeSwitcher justifySelf="flex-end" />
-      </Box>
-      <Container>
+      </Flex>
+      <Container maxW='container.xl'>
         <Tabs variant='soft-rounded' align='center' >
           <TabList>
             <Tab>To Do</Tab>
@@ -36,12 +37,10 @@ function App() {
 
           <TabPanels>
             <TabPanel>
-              To Do
-              <Journal />
+              <Journal list='To Do' />
             </TabPanel>
             <TabPanel>
-              Daily Thoughts
-              <Journal />
+              <Journal list='Daily Thoughts' />
             </TabPanel>
           </TabPanels>
         </Tabs>
